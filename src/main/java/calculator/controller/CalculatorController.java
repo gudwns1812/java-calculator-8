@@ -14,7 +14,7 @@ public class CalculatorController {
 
     public void run() {
         String expression = InputView.readLine();
-        String result = service.splitExpression(expression);
+        int result = service.splitExpression(expression);
         OutputView.printResult(result);
     }
 }
