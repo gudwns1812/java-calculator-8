@@ -17,25 +17,44 @@ public class CalculatorService {
     }
 
     public long addNumbers(String expression) {
-        String numberExpression = divideDelimiterAndNumber(expression);
+        ParsedExpression parsed = ParsedExpression.fromExpression(expression);
+        registerDelimiter(parsed);
         String regex = delimiterManager.getRegex();
-        String[] numbers = numberExpression.split(regex);
+        String[] numbers = parsed.numberString().split(regex);
         return calculator.add(numbers);
     }
 
-    private String divideDelimiterAndNumber(String expression) {
-        String[] split = expression.split(END_CUSTOM_DELIMITER);
-        if (split.length == 1) {
-            return split[0];
-        }
-        String customDelimiter = split[0];
-        String numberString = split[1];
 
-        if (!customDelimiter.startsWith(START_CUSTOM_DELIMITER)) {
+    private void registerDelimiter(ParsedExpression parsedExpression) {
+        if (parsedExpression.isEmptyCustomDelimiter()) {
+            return;
+        }
+        if (!parsedExpression.hasCorrectCustomDelimiter()) {
             throw new IllegalArgumentException("올바른 식이 아닙니다.");
         }
-        delimiterManager.addCustomRegex(customDelimiter.substring(2));
+        delimiterManager.addCustomRegex(parsedExpression.getCustomDelimiter());
+    }
 
-        return numberString;
+    private record ParsedExpression(String customDelimiterString, String numberString) {
+
+        public boolean isEmptyCustomDelimiter() {
+            return customDelimiterString.isEmpty();
+        }
+
+        public String getCustomDelimiter() {
+            return customDelimiterString.substring(2);
+        }
+
+        public boolean hasCorrectCustomDelimiter() {
+            return customDelimiterString.startsWith(START_CUSTOM_DELIMITER);
+        }
+
+        public static ParsedExpression fromExpression(String expression) {
+            String[] split = expression.split(END_CUSTOM_DELIMITER);
+            if (split.length == 1) {
+                return new ParsedExpression("", split[0]);
+            }
+            return new ParsedExpression(split[0], split[1]);
+        }
     }
 }

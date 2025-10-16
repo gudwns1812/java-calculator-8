@@ -27,7 +27,7 @@ class CalculatorTest {
         //when
         long result = service.addNumbers(testInput);
         //then
-        assertThat(result).isEqualTo(0);
+        assertThat(result).isEqualTo(0L);
     }
 
     @Test
