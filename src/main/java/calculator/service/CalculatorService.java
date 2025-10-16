@@ -18,31 +18,38 @@ public class CalculatorService {
 
     public long addNumbers(String expression) {
         ParsedExpression parsed = ParsedExpression.fromExpression(expression);
-        registerDelimiter(parsed);
+        registerCustomDelimiter(parsed);
         String regex = delimiterManager.getRegex();
-        String[] numbers = parsed.numberString().split(regex);
+        String[] numbers = getNumbers(parsed.numberString, regex);
         return calculator.add(numbers);
     }
 
-
-    private void registerDelimiter(ParsedExpression parsedExpression) {
+    private void registerCustomDelimiter(ParsedExpression parsedExpression) {
         if (parsedExpression.isEmptyCustomDelimiter()) {
             return;
-        }
-        if (!parsedExpression.hasCorrectCustomDelimiter()) {
-            throw new IllegalArgumentException("올바른 식이 아닙니다.");
         }
         delimiterManager.addCustomRegex(parsedExpression.getCustomDelimiter());
     }
 
-    private record ParsedExpression(String customDelimiterString, String numberString) {
+    private static String[] getNumbers(String numberExpression, String regex) {
+        return numberExpression.split(regex);
+    }
+
+    private static class ParsedExpression {
+        private final String customDelimiterString;
+        private final String numberString;
+
+        private ParsedExpression(String customDelimiterString, String numberString) {
+            this.customDelimiterString = customDelimiterString;
+            this.numberString = numberString;
+        }
 
         public boolean isEmptyCustomDelimiter() {
             return customDelimiterString.isEmpty();
         }
 
         public String getCustomDelimiter() {
-            return customDelimiterString.substring(2);
+            return customDelimiterString;
         }
 
         public boolean hasCorrectCustomDelimiter() {
@@ -54,7 +61,14 @@ public class CalculatorService {
             if (split.length == 1) {
                 return new ParsedExpression("", split[0]);
             }
-            return new ParsedExpression(split[0], split[1]);
+
+            String customDelimiter = split[0];
+            if (!customDelimiter.startsWith(START_CUSTOM_DELIMITER)) {
+                throw new IllegalArgumentException("올바른 커스텀 구분자가 아닙니다.");
+            }
+
+            int customDelimiterIndex = START_CUSTOM_DELIMITER.length();
+            return new ParsedExpression(customDelimiter.substring(customDelimiterIndex), split[1]);
         }
     }
 }
