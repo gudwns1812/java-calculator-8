@@ -17,9 +17,6 @@ public class CalculatorService {
     }
 
     public int splitExpression(String expression) {
-        if (expression.isEmpty()) {
-            return 0;
-        }
         String numberExpression = divideDelimiterAndNumber(expression);
         String regex = delimiterManager.getRegex();
         String[] numbers = numberExpression.split(regex);
