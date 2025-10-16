@@ -3,6 +3,7 @@ package calculator.service;
 import static org.assertj.core.api.Assertions.assertThat;
 
 import calculator.model.Calculator;
+import calculator.model.DelimiterManager;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -10,12 +11,14 @@ import org.junit.jupiter.api.Test;
 class CalculatorServiceTest {
 
     private Calculator calculator;
+    private DelimiterManager manager;
     private CalculatorService service;
 
     @BeforeEach
     void setUp() {
         calculator = new Calculator();
-        service = new CalculatorService(calculator);
+        manager = new DelimiterManager();
+        service = new CalculatorService(calculator, manager);
     }
 
     @Test
@@ -34,6 +37,17 @@ class CalculatorServiceTest {
     public void basic_delimiter() {
         //given
         String input = "1,2:3";
+        //when
+        int result = service.splitExpression(input);
+        //then
+        assertThat(result).isEqualTo(6);
+    }
+
+    @Test
+    @DisplayName("커스텀 구분자를 이용해 숫자를 계산한다.")
+    public void using_custom_delimiter() {
+        //given
+        String input = "//;\\n1;2;3";
         //when
         int result = service.splitExpression(input);
         //then
