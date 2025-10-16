@@ -25,7 +25,7 @@ class CalculatorTest {
         //given
         String testInput = "";
         //when
-        int result = service.splitExpression(testInput);
+        long result = service.splitExpression(testInput);
         //then
         assertThat(result).isEqualTo(0);
     }
@@ -60,7 +60,7 @@ class CalculatorTest {
         //given
         String input = "1,,2:3";
         //when
-        int result = service.splitExpression(input);
+        long result = service.splitExpression(input);
         //then
         assertThat(result).isEqualTo(6);
     }
