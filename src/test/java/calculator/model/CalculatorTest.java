@@ -25,7 +25,7 @@ class CalculatorTest {
         //given
         String testInput = "";
         //when
-        long result = service.splitExpression(testInput);
+        long result = service.addNumbers(testInput);
         //then
         assertThat(result).isEqualTo(0);
     }
@@ -38,7 +38,7 @@ class CalculatorTest {
         //when
 
         //then
-        assertThatThrownBy(() -> service.splitExpression(input))
+        assertThatThrownBy(() -> service.addNumbers(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -50,7 +50,7 @@ class CalculatorTest {
         //when
 
         //then
-        assertThatThrownBy(() -> service.splitExpression(input))
+        assertThatThrownBy(() -> service.addNumbers(input))
                 .isInstanceOf(IllegalArgumentException.class);
     }
 
@@ -60,7 +60,7 @@ class CalculatorTest {
         //given
         String input = "1,,2:3";
         //when
-        long result = service.splitExpression(input);
+        long result = service.addNumbers(input);
         //then
         assertThat(result).isEqualTo(6);
     }

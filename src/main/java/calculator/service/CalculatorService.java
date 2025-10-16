@@ -16,7 +16,7 @@ public class CalculatorService {
         this.delimiterManager = delimiterManager;
     }
 
-    public long splitExpression(String expression) {
+    public long addNumbers(String expression) {
         String numberExpression = divideDelimiterAndNumber(expression);
         String regex = delimiterManager.getRegex();
         String[] numbers = numberExpression.split(regex);

@@ -25,7 +25,7 @@ class CalculatorServiceTest {
         //given
         String input = "1,2:3";
         //when
-        long result = service.splitExpression(input);
+        long result = service.addNumbers(input);
         //then
         assertThat(result).isEqualTo(6);
     }
@@ -36,7 +36,7 @@ class CalculatorServiceTest {
         //given
         String input = "//;\\n1;2;3";
         //when
-        long result = service.splitExpression(input);
+        long result = service.addNumbers(input);
         //then
         assertThat(result).isEqualTo(6);
     }
@@ -47,7 +47,7 @@ class CalculatorServiceTest {
         //given
         String input = "//;\\n1;2,3:4";
         //when
-        long result = service.splitExpression(input);
+        long result = service.addNumbers(input);
         //then
         assertThat(result).isEqualTo(10);
     }
@@ -58,7 +58,7 @@ class CalculatorServiceTest {
         //given
         String input = "//!!!;;\\n1!!!;;2!!!;;3";
         //when
-        long result = service.splitExpression(input);
+        long result = service.addNumbers(input);
         //then
         assertThat(result).isEqualTo(6);
     }
