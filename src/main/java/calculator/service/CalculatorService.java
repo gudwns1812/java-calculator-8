@@ -2,11 +2,9 @@ package calculator.service;
 
 import calculator.model.Calculator;
 import calculator.model.DelimiterManager;
+import calculator.model.ParsedExpression;
 
 public class CalculatorService {
-
-    private static final String START_CUSTOM_DELIMITER = "//";
-    private static final String END_CUSTOM_DELIMITER = "\\\\n";
 
     private final Calculator calculator;
     private final DelimiterManager delimiterManager;
@@ -20,7 +18,7 @@ public class CalculatorService {
         ParsedExpression parsed = ParsedExpression.fromExpression(expression);
         registerCustomDelimiter(parsed);
         String regex = delimiterManager.getRegex();
-        String[] numbers = getNumbers(parsed.numberString, regex);
+        String[] numbers = getNumbers(parsed.getNumberString(), regex);
         return calculator.add(numbers);
     }
 
@@ -35,40 +33,4 @@ public class CalculatorService {
         return numberExpression.split(regex);
     }
 
-    private static class ParsedExpression {
-        private final String customDelimiterString;
-        private final String numberString;
-
-        private ParsedExpression(String customDelimiterString, String numberString) {
-            this.customDelimiterString = customDelimiterString;
-            this.numberString = numberString;
-        }
-
-        public boolean isEmptyCustomDelimiter() {
-            return customDelimiterString.isEmpty();
-        }
-
-        public String getCustomDelimiter() {
-            return customDelimiterString;
-        }
-
-        public boolean hasCorrectCustomDelimiter() {
-            return customDelimiterString.startsWith(START_CUSTOM_DELIMITER);
-        }
-
-        public static ParsedExpression fromExpression(String expression) {
-            String[] split = expression.split(END_CUSTOM_DELIMITER);
-            if (split.length == 1) {
-                return new ParsedExpression("", split[0]);
-            }
-
-            String customDelimiter = split[0];
-            if (!customDelimiter.startsWith(START_CUSTOM_DELIMITER)) {
-                throw new IllegalArgumentException("올바른 커스텀 구분자가 아닙니다.");
-            }
-
-            int customDelimiterIndex = START_CUSTOM_DELIMITER.length();
-            return new ParsedExpression(customDelimiter.substring(customDelimiterIndex), split[1]);
-        }
-    }
 }
