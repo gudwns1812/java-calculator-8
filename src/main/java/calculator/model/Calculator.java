@@ -9,7 +9,7 @@ public class Calculator {
                 .map(Calculator::parseIntWithCheckEmpty)
                 .peek(Calculator::validateNegative)
                 .reduce(Long::sum)
-                .orElseThrow(() -> new IllegalArgumentException("올바른 값이 아닙니다."));
+                .orElse(0L);
     }
 
     private static Long parseIntWithCheckEmpty(String target) {

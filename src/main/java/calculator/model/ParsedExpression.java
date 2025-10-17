@@ -3,7 +3,7 @@ package calculator.model;
 public class ParsedExpression {
 
     private static final String START_CUSTOM_DELIMITER = "//";
-    private static final String END_CUSTOM_DELIMITER = "\\\\n";
+    private static final String END_CUSTOM_DELIMITER = "\\n";
 
     private final String customDelimiterString;
     private final String numberString;
@@ -26,17 +26,16 @@ public class ParsedExpression {
     }
 
     public static ParsedExpression fromExpression(String expression) {
-        String[] split = expression.split(END_CUSTOM_DELIMITER);
-        if (split.length == 1) {
-            return new ParsedExpression("", split[0]);
-        }
 
-        String customDelimiter = split[0];
-        if (!customDelimiter.startsWith(START_CUSTOM_DELIMITER)) {
-            throw new IllegalArgumentException("올바른 커스텀 구분자가 아닙니다.");
+        if (!(expression.startsWith(START_CUSTOM_DELIMITER) && expression.contains(END_CUSTOM_DELIMITER))) {
+            return new ParsedExpression("", expression);
         }
+        int idxEndCustomDelimiter = expression.indexOf(END_CUSTOM_DELIMITER);
+        int startCustomDelimiter = START_CUSTOM_DELIMITER.length();
+        String customDelimiter = expression.substring(startCustomDelimiter, idxEndCustomDelimiter);
+        String numberStr = expression.substring(idxEndCustomDelimiter + END_CUSTOM_DELIMITER.length());
 
-        int customDelimiterIndex = START_CUSTOM_DELIMITER.length();
-        return new ParsedExpression(customDelimiter.substring(customDelimiterIndex), split[1]);
+        return new ParsedExpression(customDelimiter, numberStr);
     }
+    
 }
