@@ -2,7 +2,6 @@ package calculator.service;
 
 import calculator.model.Calculator;
 import calculator.model.DelimiterManager;
-import calculator.model.ParsedExpression;
 
 public class CalculatorService {
 
@@ -14,23 +13,9 @@ public class CalculatorService {
         this.delimiterManager = delimiterManager;
     }
 
-    public long addNumbers(String expression) {
-        ParsedExpression parsed = ParsedExpression.fromExpression(expression);
-        registerCustomDelimiter(parsed);
+    public long addNumbers(String numberString) {
         String regex = delimiterManager.getRegex();
-        String[] numbers = getNumbers(parsed.getNumberString(), regex);
+        String[] numbers = numberString.split(regex);
         return calculator.add(numbers);
     }
-
-    private void registerCustomDelimiter(ParsedExpression parsedExpression) {
-        if (parsedExpression.isEmptyCustomDelimiter()) {
-            return;
-        }
-        delimiterManager.addCustomRegex(parsedExpression.getCustomDelimiter());
-    }
-
-    private static String[] getNumbers(String numberExpression, String regex) {
-        return numberExpression.split(regex);
-    }
-
 }
