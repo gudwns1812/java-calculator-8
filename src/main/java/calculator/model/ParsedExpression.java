@@ -27,9 +27,14 @@ public class ParsedExpression {
 
     public static ParsedExpression fromExpression(String expression) {
 
-        if (!(expression.startsWith(START_CUSTOM_DELIMITER) && expression.contains(END_CUSTOM_DELIMITER))) {
+        if (expression.indexOf(END_CUSTOM_DELIMITER) != expression.lastIndexOf(END_CUSTOM_DELIMITER)) {
+            throw new IllegalArgumentException("구분자가 여러개 입니다.");
+        }
+
+        if (!expression.startsWith(START_CUSTOM_DELIMITER)) {
             return new ParsedExpression("", expression);
         }
+
         int idxEndCustomDelimiter = expression.indexOf(END_CUSTOM_DELIMITER);
         int startCustomDelimiter = START_CUSTOM_DELIMITER.length();
         String customDelimiter = expression.substring(startCustomDelimiter, idxEndCustomDelimiter);
@@ -37,5 +42,5 @@ public class ParsedExpression {
 
         return new ParsedExpression(customDelimiter, numberStr);
     }
-    
+
 }

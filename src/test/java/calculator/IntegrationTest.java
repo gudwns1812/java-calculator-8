@@ -1,6 +1,7 @@
 package calculator;
 
 import static org.assertj.core.api.Assertions.assertThat;
+import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import calculator.model.Calculator;
 import calculator.model.DelimiterManager;
@@ -30,9 +31,9 @@ public class IntegrationTest {
     void custom_and_basic_delimiter() {
         //given
         String input = "//;\\n1;2,3:4";
+        //when
         ParsedExpression parsed = ParsedExpression.fromExpression(input);
         delimiterService.registerCustomDelimiter(parsed);
-        //when
         long result = calculatorService.addNumbers(parsed.getNumberString());
         //then
         assertThat(result).isEqualTo(10);
@@ -43,9 +44,9 @@ public class IntegrationTest {
     void multi_digits_delimiter() {
         //given
         String input = "//!!!;;\\n1!!!;;2!!!;;3";
+        //when
         ParsedExpression parsed = ParsedExpression.fromExpression(input);
         delimiterService.registerCustomDelimiter(parsed);
-        //when
         long result = calculatorService.addNumbers(parsed.getNumberString());
         //then
         assertThat(result).isEqualTo(6);
@@ -56,11 +57,22 @@ public class IntegrationTest {
     void empty_expression_with_custom_delimiter() {
         //given
         String input = "//;\\n";
+        //when
         ParsedExpression parsed = ParsedExpression.fromExpression(input);
         delimiterService.registerCustomDelimiter(parsed);
-        //when
         long result = calculatorService.addNumbers(parsed.getNumberString());
         //then
         assertThat(result).isEqualTo(0);
+    }
+
+    @Test
+    @DisplayName("\n 문자열이 여러번 등장 하는 경우")
+    void multiple_END_CUSTOM_DELIMITER() {
+        //given
+        String input = "//;\\n1;\\n2";
+        //when
+        //then
+        assertThatThrownBy(() -> ParsedExpression.fromExpression(input))
+                .isInstanceOf(IllegalArgumentException.class);
     }
 }
