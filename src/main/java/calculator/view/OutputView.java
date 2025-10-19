@@ -1,6 +1,6 @@
 package calculator.view;
 
-public class OutputView {
+public abstract class OutputView {
 
     private static final String OUTPUT_MESSAGE = "결과 : ";
 
