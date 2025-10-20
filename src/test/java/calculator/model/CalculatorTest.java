@@ -15,7 +15,7 @@ class CalculatorTest {
 
     @BeforeEach
     void setUp() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator(new NumberValidator(), new NumberParser());
         manager = new DelimiterManager();
         service = new CalculatorService(calculator, manager);
     }

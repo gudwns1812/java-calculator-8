@@ -4,6 +4,8 @@ import static org.assertj.core.api.Assertions.assertThat;
 
 import calculator.model.Calculator;
 import calculator.model.DelimiterManager;
+import calculator.model.NumberParser;
+import calculator.model.NumberValidator;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
@@ -15,7 +17,7 @@ class CalculatorServiceTest {
 
     @BeforeEach
     void setUp() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator(new NumberValidator(), new NumberParser());
         manager = new DelimiterManager();
         service = new CalculatorService(calculator, manager);
     }

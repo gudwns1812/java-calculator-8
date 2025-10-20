@@ -5,6 +5,8 @@ import static org.assertj.core.api.Assertions.assertThatThrownBy;
 
 import calculator.model.Calculator;
 import calculator.model.DelimiterManager;
+import calculator.model.NumberParser;
+import calculator.model.NumberValidator;
 import calculator.model.ParsedExpression;
 import calculator.service.CalculatorService;
 import calculator.service.DelimiterService;
@@ -19,7 +21,7 @@ public class IntegrationTest {
 
     @BeforeEach
     void setUp() {
-        Calculator calculator = new Calculator();
+        Calculator calculator = new Calculator(new NumberValidator(), new NumberParser());
         manager = new DelimiterManager();
         calculatorService = new CalculatorService(calculator, manager);
         delimiterService = new DelimiterService(manager);
