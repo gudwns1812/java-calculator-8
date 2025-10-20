@@ -35,10 +35,10 @@ public class ParsedExpression {
             return new ParsedExpression("", expression);
         }
 
-        int idxEndCustomDelimiter = expression.indexOf(END_CUSTOM_DELIMITER);
+        int endCustomDelimiter = expression.indexOf(END_CUSTOM_DELIMITER);
         int startCustomDelimiter = START_CUSTOM_DELIMITER.length();
-        String customDelimiter = expression.substring(startCustomDelimiter, idxEndCustomDelimiter);
-        String numberStr = expression.substring(idxEndCustomDelimiter + END_CUSTOM_DELIMITER.length());
+        String customDelimiter = expression.substring(startCustomDelimiter, endCustomDelimiter);
+        String numberStr = expression.substring(endCustomDelimiter + END_CUSTOM_DELIMITER.length());
 
         return new ParsedExpression(customDelimiter, numberStr);
     }
